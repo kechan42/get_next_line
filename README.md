@@ -52,3 +52,7 @@ https://visualgdb.com/gdbreference/commands/display
 https://stackoverflow.com/questions/668962/what-is-the-difference-between-gcc-ggdb-and-gcc-g
 
 https://www.reddit.com/r/C_Programming/comments/1etgqmv/how_do_i_fix_this_memory_leak/
+
+https://en.wikipedia.org/wiki/File_descriptor
+
+https://stackoverflow.com/questions/28945283/possible-to-both-return-and-free-a-dynamically-allocated-array-in-c
