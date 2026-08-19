@@ -6,7 +6,7 @@
 /*   By: kechan <kechan@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 12:34:04 by kechan            #+#    #+#             */
-/*   Updated: 2026/08/18 17:53:21 by kechan           ###   ########.fr       */
+/*   Updated: 2026/08/19 16:17:07 by kechan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ char	*ft_strjoin(char const *s1, char const *s2, size_t i, size_t j)
 		while (j <= strl2)
 			mem[i++] = s2[j++];
 	}
+	// printf("this is mem|%s|\n", mem);
 	return (mem);
 }
 
