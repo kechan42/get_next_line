@@ -6,14 +6,14 @@
 /*   By: kechan <kechan@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 12:20:19 by kechan            #+#    #+#             */
-/*   Updated: 2026/08/19 20:58:29 by kechan           ###   ########.fr       */
+/*   Updated: 2026/08/28 20:45:27 by kechan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
 #ifndef BUFFER_SIZE
-# define BUFFER_SIZE 1
+# define BUFFER_SIZE 10
 #endif
 
 char	*ft_strdup(const char *s)
@@ -42,30 +42,29 @@ char	*ft_strdup(const char *s)
 
 char	*read_line(char *pline, int fd)
 {
-	char	*buf;
-	char	*temp;
-	ssize_t	read_n;
+	int				read_n;
+	char			*buf;
+	char			*temp;
 
+	read_n = 1;
 	if (pline == NULL)
 		pline = ft_calloc(1, sizeof(char));
 	buf = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	read_n = 1;
 	while (ft_strchr(buf, '\n') == 0 && read_n > 0)
 	{
 		read_n = read(fd, buf, BUFFER_SIZE);
 		if (read_n < 0)
-		{
-			free (pline);
-			free (buf);
-			return (NULL);
-		}
+			break ;
 		buf[read_n] = '\0';
 		temp = pline;
 		pline = ft_strjoin(temp, buf, 0, 0);
 		free (temp);
 	}
 	free (buf);
-	return (pline);
+	if (pline[0] != '\0')
+		return (pline);
+	free (pline);
+	return (NULL);
 }
 
 char	*extract_line(char *pline)
@@ -102,12 +101,11 @@ char	*extract_remnant(char *pline)
 	size_t	strl;
 
 	strl = 0;
-	// printf("remnant input|%s|\n", pline);
 	while (pline[strl] != '\0')
 		strl++;
 	npos = 0;
 	i = 0;
-	if (pline == NULL || pline[0] == '\0')
+	if (pline == NULL || pline[0] == '\0' || ft_strchr(pline, '\n') == 0)
 		return (NULL);
 	while (pline[npos] != '\n' && ft_strchr(pline, '\n') != 0)
 		npos++;
@@ -127,7 +125,9 @@ char	*get_next_line(int fd)
 	static char	*storage;
 	char		*input;
 	char		*line;
+	size_t		i;
 
+	i = 0;
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	input = read_line(storage, fd);
@@ -202,6 +202,10 @@ int main(void)
 		free(output);
 
 				output = get_next_line(fd);
+		printf("%s", output);
+		free(output);
+
+					output = get_next_line(fd);
 		printf("%s", output);
 		free(output);
 }
