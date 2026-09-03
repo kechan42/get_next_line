@@ -6,7 +6,7 @@
 /*   By: kechan <kechan@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 12:20:19 by kechan            #+#    #+#             */
-/*   Updated: 2026/09/03 20:37:43 by kechan           ###   ########.fr       */
+/*   Updated: 2026/09/03 20:43:28 by kechan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,7 @@ char	*get_next_line(int fd)
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	input = read_line(storage, fd);
+	input = read_line(storage, -1);
 	if (input == NULL)
 	{
 		free(input);
