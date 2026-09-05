@@ -6,7 +6,7 @@
 /*   By: kechan <kechan@student.42tokyo.jp>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/28 12:20:19 by kechan            #+#    #+#             */
-/*   Updated: 2026/09/04 20:49:02 by kechan           ###   ########.fr       */
+/*   Updated: 2026/09/05 20:52:34 by kechan           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,15 @@ char	*read_line(char *pline, int fd)
 	if (pline == NULL)
 		pline = ft_calloc(1, sizeof(char));
 	buf = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (pline == NULL || buf == NULL)
-	{
-		free (pline);
-		free (buf);
-		return (NULL);
-	}
-	while (ft_strchr(buf, '\n') == 0 && read_n > 0)
+	while (ft_strchr(buf, '\n') == 0 && read_n > 0 && buf != NULL)
 	{
 		read_n = read(fd, buf, BUFFER_SIZE);
-		if (read_n <= 0)
-			break ;
+		if (read_n == -1)
+		{
+			free(buf);
+			free(pline);
+			return (NULL);
+		}
 		buf[read_n] = '\0';
 		temp = pline;
 		pline = ft_strjoin(temp, buf, 0, 0);
@@ -115,8 +113,6 @@ char	*extract_remnant(char *pline)
 	if (ft_strchr(pline, '\n') != 0)
 		while (pline[npos] != '\n')
 			npos++;
-	if (npos == 0 && ft_strchr(pline, '\n') == 0)
-		return (NULL);
 	if (ft_strchr(pline, '\n') != 0)
 		pline++;
 	if (pline[0] == '\n')
@@ -138,14 +134,9 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	input = read_line(storage, fd);
-	if (input == NULL)
-	{
-		free(storage);
-		return (NULL);
-	}
 	line = extract_line(input);
 	storage = extract_remnant(input);
-	if (line == NULL && storage == NULL)
+	if (input == NULL || (line == NULL))
 	{
 		free(line);
 		free(storage);
@@ -156,76 +147,78 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-#include <stdio.h>
-int main(void)
-{
-	int fd;
-	char *output;
+// #include <stdio.h>
+// int main(void)
+// {
+// 	int fd;
+// 	char *output;
 
-	fd = open("test.txt", O_RDONLY);
-	// fd = 1000;
-	// fd = -1;
+// 	fd = open("test.txt", O_RDONLY);
+// 	// fd = 1000;
+// 	// fd = -1;
 
-	output = "init val";
-	// while (output != NULL)
-	// {
-	// 	output = get_next_line(fd);
-	// 	printf("%s", output);
-	// 	free(output);
-	// }
+// 	output = "init val";
+// 	// while (output != NULL)
+// 	// {
+// 	// 	output = get_next_line(fd);
+// 	// 	printf("%s", output);
+// 	// 	free(output);
+// 	// }
 
-			output = get_next_line(fd);
-		printf("1: %s", output);
-		free(output);
+// 			output = get_next_line(fd);
+// 		printf("1: %s", output);
+// 		free(output);
 
-				output = get_next_line(fd);
-		printf("2: %s", output);
-		free(output);
+// 				output = get_next_line(fd);
+// 		printf("2: %s", output);
+// 		free(output);
 
-				output = get_next_line(fd);
-		printf("\n3: %s\n", output);
-		free(output);
+// 				output = get_next_line(fd);
+// 		printf("\n3: %s\n", output);
+// 		free(output);
 
 
 
-		output = get_next_line(fd);
-		printf("4: %s", output);
-		free(output);
+// 		output = get_next_line(fd);
+// 		printf("4: %s", output);
+// 		free(output);
 
-		close(fd);
+// 		close(fd);
 
-		fd = -1;
+// 		fd = -1;
 
-				output = get_next_line(fd);
-		printf("5: %s", output);
-		free(output);
+// 				output = get_next_line(fd);
+// 		printf("5: %s", output);
+// 		free(output);
 
-		fd = open("test.txt", O_RDONLY);
+// 		fd = open("test.txt", O_RDONLY);
 
-		output = get_next_line(fd);
-		printf("6: %s", output);
-		free(output);
-				output = get_next_line(fd);
-		printf("7: %s", output);
-		free(output);
+// 		output = get_next_line(fd);
+// 		printf("6: %s", output);
+// 		free(output);
+// 				output = get_next_line(fd);
+// 		printf("7: %s", output);
+// 		free(output);
 
-				output = get_next_line(fd);
-		printf("8: %s", output);
-		free(output);
+// 				output = get_next_line(fd);
+// 		printf("8: %s", output);
+// 		free(output);
 
-		// 		output = get_next_line(fd);
-		// printf("9: %s", output);
-		// free(output);
+// 		close(fd);
 
-		// 		output = get_next_line(fd);
-		// printf("10: %s", output);
-		// free(output);
+// 		// 		output = get_next_line(fd);
+// 		// printf("9: %s", output);
+// 		// free(output);
 
-		// 		output = get_next_line(fd);
-		// printf("11: %s", output);
-		// free(output);
+// 		// 		output = get_next_line(fd);
+// 		// printf("10: %s", output);
+// 		// free(output);
 
-		// 			output = get_next_line(fd);
-		// printf("12: %s", output);
-		// free(output);
-}
+// 		// 		output = get_next_line(fd);
+// 		// printf("11: %s", output);
+// 		// free(output);
+
+// 		// 			output = get_next_line(fd);
+// 		// printf("12: %s", output);
+// 		// free(output);
+// }
